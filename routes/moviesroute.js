@@ -64,9 +64,16 @@ router.post('/', (req, res, next) => {
 });
 
 /* PUT ReWrite One Movie. */
-router.get('/:movie_id', (req, res, next) => {
+router.put('/:movie_id', (req, res, next) => {
 
-    const promise = Movie.findByIdAndUpdate(req.params.movie_id, req.body);
+    const promise = Movie.findByIdAndUpdate(
+        req.params.movie_id,
+        req.body,
+        {
+            new:true,
+            lastUpdate:Date.now()
+        }
+    );
 
     promise.then((data) => {
         if (!data) next('The movie was not found for update');
@@ -76,5 +83,6 @@ router.get('/:movie_id', (req, res, next) => {
     });
 
 });
+
 
 module.exports = router;

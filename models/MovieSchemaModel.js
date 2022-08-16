@@ -14,6 +14,10 @@ const MovieSchema = new Schema({
     date: {
         type: Date,
         default: Date.now()
+    },
+    lastUpdate:{
+        type:Date,
+        default: Date.now()
     }
 });
 
