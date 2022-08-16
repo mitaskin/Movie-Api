@@ -19,11 +19,12 @@ router.get('/', (req, res) => {
 });
 
 /* GET List One Movie. */
-router.get('/:movie_id', (req, res) => {
+router.get('/:movie_id', (req, res, next) => {
 
     const promise = Movie.findById(req.params.movie_id);
 
     promise.then((data) => {
+        if (!data) next('The movie was not found');
         res.json(data);
     }).catch((err) => {
         res.json(err);
@@ -56,6 +57,20 @@ router.post('/', (req, res, next) => {
 
     promise.then((data) => {
         res.json({status: 1});
+    }).catch((err) => {
+        res.json(err);
+    });
+
+});
+
+/* PUT ReWrite One Movie. */
+router.get('/:movie_id', (req, res, next) => {
+
+    const promise = Movie.findByIdAndUpdate(req.params.movie_id, req.body);
+
+    promise.then((data) => {
+        if (!data) next('The movie was not found for update');
+        res.json(data);
     }).catch((err) => {
         res.json(err);
     });
