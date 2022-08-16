@@ -16,10 +16,18 @@ router.post('/', (req, res, next) => {
         year: year
     });
 
-    movie.save((error, result) => {
-        if (error) res.json(error);
-        res.json(result);
-    });
+
+    // movie.save((error, result) => {
+    //     if (error) res.json(error);
+    //     res.json(result);
+    // });
+
+    const promise = movie.save();
+    promise.then((data) => {
+        res.json({status: 1});
+    }).catch((err) => {
+        res.json(err);
+    })
 
 });
 
