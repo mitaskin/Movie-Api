@@ -4,7 +4,40 @@ const router = express.Router();
 //Models
 const Movie = require('../models/MovieSchemaModel.js');
 
+/*======================    SUB ROUTERS    ======================*/
 
+/* GET List TOP10 Movies. */
+router.get('/top10', (req, res) => {
+    const promise = Movie.find({}).limit(10).sort({imdb_score: -1});
+
+    promise.then((data) => {
+        res.json(data);
+    }).catch((err) => {
+        res.json(err);
+    });
+
+});
+
+/* GET List Start-End Day Movies. */
+router.get('/between/:start_year/:end_year', (req, res) => {
+    const {start_year,end_year} = req.params;
+
+    const promise = Movie.find(
+        {
+            year: {"$gte":parseInt(start_year),"$lte":parseInt(end_year)}
+        }
+    ).sort({imdb_score: -1});
+
+    promise.then((data) => {
+        res.json(data);
+    }).catch((err) => {
+        res.json(err);
+    });
+
+});
+
+
+/*======================    MAIN ROUTERS    ======================*/
 /* GET List ALl Movies. */
 router.get('/', (req, res) => {
 
@@ -70,13 +103,27 @@ router.put('/:movie_id', (req, res, next) => {
         req.params.movie_id,
         req.body,
         {
-            new:true,
-            lastUpdate:Date.now()
+            new: true,
+            lastUpdate: Date.now()
         }
     );
 
     promise.then((data) => {
         if (!data) next('The movie was not found for update');
+        res.json(data);
+    }).catch((err) => {
+        res.json(err);
+    });
+
+});
+
+/* DELETE One Movie. */
+router.delete('/:movie_id', (req, res, next) => {
+
+    const promise = Movie.findByIdAndRemove(req.params.movie_id);
+
+    promise.then((data) => {
+        if (!data) next('The movie was not found for delete');
         res.json(data);
     }).catch((err) => {
         res.json(err);
