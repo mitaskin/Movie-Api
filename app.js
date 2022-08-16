@@ -4,8 +4,11 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
+//Routers Folder İnclude Project
 const indexRouter = require('./routes/index');
 const movieRouter = require('./routes/moviesroute');
+const directorRouter = require('./routes/directorroute');
+
 
 const app = express();
 
@@ -19,8 +22,12 @@ app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+//Router URL to RouterSetting
 app.use('/', indexRouter);
 app.use('/api/movies', movieRouter);
+app.use('/api/director', directorRouter);
+
 
 //DB Connection
 const db = require('./helper/db.js');
