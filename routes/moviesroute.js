@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 //Models
-const Movie = require('../models/Movie.js');
+const Movie = require('../models/MovieSchemaModel.js');
 
 /* GET movie listing. */
 router.post('/', (req, res, next) => {
