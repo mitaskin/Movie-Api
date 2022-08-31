@@ -4,3 +4,24 @@ block content
   h1= title
   p Welcome to #{title}
   p mitaskin
+
+
+
+    div
+      table
+        thead
+          tr
+            th Description
+            th Link
+        tbody
+            tr
+              td="Find All Movies"
+              td
+                a(href="/api/movies")
+                  button(type="button") /api/movies
+
+            tr
+              td="Find Top 10 Movies"
+              td
+                a(href="api/movies/top10")
+                  button(type="button") /api/movies/top10
