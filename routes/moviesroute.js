@@ -20,11 +20,11 @@ router.get('/top10', (req, res) => {
 
 /* GET List Start-End Day Movies. */
 router.get('/between/:start_year/:end_year', (req, res) => {
-    const {start_year,end_year} = req.params;
+    const {start_year, end_year} = req.params;
 
     const promise = Movie.find(
         {
-            year: {"$gte":parseInt(start_year),"$lte":parseInt(end_year)}
+            year: {"$gte": parseInt(start_year), "$lte": parseInt(end_year)}
         }
     ).sort({imdb_score: -1});
 
@@ -41,7 +41,19 @@ router.get('/between/:start_year/:end_year', (req, res) => {
 /* GET List ALl Movies. */
 router.get('/', (req, res) => {
 
-    const promise = Movie.find({});
+    const promise = Movie.aggregate([
+        {
+            $lookup: {
+                from: 'directors',
+                localField: 'director_id',
+                foreignField: '_id',
+                as: 'director'
+            }
+        },
+        {
+            $unwind: '$director'
+        }
+    ]);
 
     promise.then((data) => {
         res.json(data);

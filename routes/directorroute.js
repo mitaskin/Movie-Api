@@ -1,6 +1,6 @@
+const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
 
 //Models
 const Director = require('../models/DirectorSchemaModel');
@@ -67,12 +67,12 @@ router.get('/', (req, res, next) => {
 
 });
 
-/* GET İD Director */
+/* GET id Director */
 router.get('/:director_id', (req, res, next) => {
     const promise = Director.aggregate([
         {
-            $match:{
-                '_id':mongoose.Types.ObjectId(req.params.director_id)
+            $match: {
+                '_id': mongoose.Types.ObjectId(req.params.director_id)
             }
         },
         {
@@ -119,6 +119,41 @@ router.get('/:director_id', (req, res, next) => {
     });
 
 
-})
+});
+
+/* PUT ReWrite One Movie. */
+router.put('/:director_id', (req, res, next) => {
+
+    const promise = Director.findByIdAndUpdate(
+        req.params.director_id,
+        req.body,
+        {
+            new: true,
+            lastUpdate: Date.now()
+        }
+    );
+
+    promise.then((data) => {
+        if (!data) next('The director was not found for update');
+        res.json(data);
+    }).catch((err) => {
+        res.json(err);
+    });
+
+});
+
+/* DELETE One Director. */
+router.delete('/:director_id', (req, res, next) => {
+
+    const promise = Director.findByIdAndRemove(req.params.director_id);
+
+    promise.then((data) => {
+        if (!data) next('The director was not found for delete');
+        res.json(data);
+    }).catch((err) => {
+        res.json(err);
+    });
+
+});
 
 module.exports = router;
